@@ -1,17 +1,17 @@
-// src/App.jsx
-import { Routes, Route, Navigate } from 'react-router-dom'
-import Login from './pages/Login'
+import { Routes, Route } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import NotFound from './pages/NotFound'
 import MainApp from './pages/mainApp'
+import Login from './pages/Login'
 
 const App = () => {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
+
+  if (loading) return <div className="p-8 text-center text-gray-400">Loading...</div>
 
   return (
     <Routes>
-      <Route path="/" element={user ? <MainApp/> : <Navigate to="/login" />} />
-      <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+      <Route path="/" element={user ? <MainApp /> : <Login />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )
