@@ -2,16 +2,14 @@
 import { useState, useEffect } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { categories, sampleProducts } from '../data/SampleData';
-import Navbar from './NavbarNav';
 import BillDetails from './BillDetails';
 import { auth } from '../firebase';
 import bgProduct from '../assets/bg-product.jpeg';
 import Swal from 'sweetalert2';
 
-const ProductList = () => {
+const ProductList = ({cart,setCart, onProcess}) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [cart, setCart] = useState([]);
   const [user, setUser] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({});
   const sizes = ['S', 'M', 'L'];
@@ -83,9 +81,8 @@ const ProductList = () => {
   };
 
   return (
-    <div className='w-full 2xl:container scrollbar-hide flex mx-auto'>
-      <Navbar/>
-      <div className="w-full flex flex-col border-2 border-neutral-200/20">
+    <div className='w-full scrollbar-hide flex mx-auto'>
+     <div className="w-full flex flex-col border-2 border-neutral-200/20">
         <div className="w-full bg-white flex justify-between items-center gap-4 px-5 py-7 border-b border-neutral-200">
           <div className="flex items-center shadow-sm border border-neutral-300 px-4 py-2 rounded-xl w-2/3">
             <FiSearch className="text-gray-800 mr-2" />
@@ -182,7 +179,7 @@ const ProductList = () => {
           })}
         </div>
       </div>
-      <BillDetails cart={cart} setCart={setCart} />
+      <BillDetails cart={cart} setCart={setCart} onProcess={onProcess}/>
     </div>
   );
 };

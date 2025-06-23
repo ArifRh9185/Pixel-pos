@@ -1,19 +1,21 @@
 // BillDetails.jsx
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 
-
-const BillDetails = ({ cart, setCart }) => {
+const BillDetails = ({ cart, setCart, onProcess}) => {
   const printRef = useRef();
+  const [customerName, setCustomerName] = useState("")
 
-  const handlePrint = () => {
-    const printContent = printRef.current.innerHTML;
-    const originalContent = document.body.innerHTML;
 
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalContent;
-    window.location.reload(); // agar tampilan kembali normal
-  };
+  // const handlePrint = () => {
+  //   const printContent = printRef.current.innerHTML;
+  //   const originalContent = document.body.innerHTML;
+
+  //   document.body.innerHTML = printContent;
+  //   window.print();
+  //   document.body.innerHTML = originalContent;
+  //   window.location.reload(); // agar tampilan kembali normal
+  // };
+
   const handleQtyChange = (index, delta) => {
     const updatedCart = [...cart];
     updatedCart[index].qty += delta;
@@ -39,7 +41,6 @@ const BillDetails = ({ cart, setCart }) => {
       <div className="px-6 scrollbar-hide py-6 overflow-y-auto" ref={printRef}>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">Bill Details</h2>
-          <p className="text-sm text-gray-400">#546234</p>
         </div>
 
         <div className="mb-4">
@@ -47,6 +48,8 @@ const BillDetails = ({ cart, setCart }) => {
           <input
             type="text"
             placeholder="Customer Name"
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none shadow-sm"
           />
         </div>
@@ -142,7 +145,7 @@ const BillDetails = ({ cart, setCart }) => {
       </div>
 
       <button 
-      onClick={handlePrint}
+      onClick={ () => onProcess(customerName) }
       className="w-full py-3 bg-green-600 text-white font-semibold text-sm rounded-b-2xl hover:bg-green-700 transition-colors duration-200">
         Process Transaction
       </button>
