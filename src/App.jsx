@@ -3,11 +3,19 @@ import { useAuth } from './contexts/AuthContext'
 import NotFound from './pages/NotFound'
 import MainApp from './pages/mainApp'
 import Login from './pages/Login'
+import { ClipLoader } from 'react-spinners'
 
 const App = () => {
   const { user, loading } = useAuth()
 
-  if (loading) return <div className="p-8 text-center text-gray-400">Loading...</div>
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <ClipLoader
+          color='#00a63e'
+          size={50}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />      
+      </div>
 
   return (
     <Routes>

@@ -2,7 +2,9 @@ import React from 'react'
 
 function History() {
   return (
-    <div>History</div>
+    <div className='w-full h-full p-4'>
+      Histori
+    </div>
   )
 }
 

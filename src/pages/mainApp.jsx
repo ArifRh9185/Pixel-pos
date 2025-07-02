@@ -12,6 +12,7 @@ import { db } from '../firebase';
 import { useEffect } from 'react'
 import { collection, addDoc, query, where, getDocs, Timestamp } from 'firebase/firestore'
 import Swal from 'sweetalert2'
+import { ClipLoader } from 'react-spinners'
 
 
 
@@ -71,7 +72,14 @@ const MainApp = () => {
     }
   }
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading...</div>
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-100">
+          <ClipLoader
+            color='#00a63e'
+            size={50}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />      
+        </div>
   if (!user) return <div className="p-8 text-center text-red-500">Unauthorized</div>
 
 
@@ -81,7 +89,7 @@ const MainApp = () => {
       <main className="flex-1">
         {page === 'products' && <ProductList cart={cart} setCart={setCart} onProcess={(name) => handleSendToReceipt(name)}/>}
         {page === 'OrderList' && <OrderList data={receiptData}/>}
-        {page === 'history' && <History />}
+        {page === 'history' && <History data={receiptData}/>}
         {page === 'bills' && <Bills />}
         {page === 'settings' && <Settings />}
         {page === 'help' && <Help />}
