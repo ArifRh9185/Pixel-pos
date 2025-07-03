@@ -1,10 +1,15 @@
 // BillDetails.jsx
 import React, {useRef, useState} from 'react';
-
-const BillDetails = ({ cart, setCart, onProcess}) => {
+import Swal from 'sweetalert2';
+import { useEffect } from 'react';
+const BillDetails = ({ cart, setCart, setPage}) => {
   const printRef = useRef();
-  const [customerName, setCustomerName] = useState("")
-
+  const [customerName, setCustomerName] = useState(() => {
+    return localStorage.getItem('customerName') || '';
+  });
+  useEffect(() => {
+    localStorage.setItem('customerName', customerName);
+  }, [customerName]);
 
   // const handlePrint = () => {
   //   const printContent = printRef.current.innerHTML;
@@ -68,7 +73,7 @@ const BillDetails = ({ cart, setCart, onProcess}) => {
                   </div>
                 </div>
                 <p className="font-semibold text-sm text-green-600">
-                  Rp.{(itemPrice * item.qty).toLocaleString('id-ID')}k
+                  Rp.{(itemPrice * item.qty).toLocaleString('id-ID')}
                 </p>
               </div>
               <div className="flex items-center justify-between mt-2 text-sm">
@@ -102,7 +107,7 @@ const BillDetails = ({ cart, setCart, onProcess}) => {
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500">Subtotal</span>
-            <span className="text-neutral-700 font-semibold">Rp.{subtotal.toLocaleString('id-ID')}k</span>
+            <span className="text-neutral-700 font-semibold">Rp.{subtotal.toLocaleString('id-ID')}</span>
           </div>
           <div className="flex justify-between text-green-600">
             <span className="text-gray-500">Discount (15%)</span>
@@ -118,37 +123,37 @@ const BillDetails = ({ cart, setCart, onProcess}) => {
 
         <div className="flex justify-between text-lg font-bold text-green-600">
           <span>Total</span>
-          <span>Rp.{total.toLocaleString('id-ID')}k</span>
-        </div>
-
-        <div className="mt-4">
-          <label className="block text-sm font-medium mb-1">Select Table</label>
-          <select className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm text-gray-600 focus:outline-none shadow-sm">
-            <option>Select Table</option>
-            <option>Table 1</option>
-            <option>Table 2</option>
-            <option>Table 3</option>
-          </select>
-        </div>
-
-        <div className="mt-4">
-          <label className="block text-sm font-medium mb-2">Select Payment</label>
-          <div className="flex gap-3">
-            <div className="border rounded-xl px-3 py-2 flex-1 text-center text-green-600 font-semibold border-green-300 bg-green-50 cursor-pointer">
-              Pay with Cash
-            </div>
-            <div className="border rounded-xl px-3 py-2 flex-1 text-center text-gray-600 font-semibold cursor-pointer">
-              Pay with Card
-            </div>
-          </div>
+          <span>Rp.{total.toLocaleString('id-ID')}</span>
         </div>
       </div>
-
+      
       <button 
-      onClick={ () => onProcess(customerName) }
-      className="w-full py-3 bg-green-600 text-white font-semibold text-sm rounded-b-2xl hover:bg-green-700 transition-colors duration-200">
+        onClick={() => {
+          if (cart.length === 0) {
+            return Swal.fire({
+              title: 'Cart is Empty',
+              text: 'Tambahkan item ke dalam keranjang terlebih dahulu.',
+              icon: 'warning',
+              confirmButtonText: 'OK'
+            });
+          }
+
+          if (customerName.trim() === '') {
+            return Swal.fire({
+              title: 'Customer Name Required',
+              text: 'Silahkan isi nama customer terlebih dahulu.',
+              icon: 'error',
+              confirmButtonText: 'oke'
+            });
+          }
+
+          setPage('payment');
+        }}
+        className="w-full py-3 bg-green-600 text-white font-semibold text-sm rounded-b-2xl hover:bg-green-700 transition-colors duration-200"
+      >
         Process Transaction
       </button>
+
     </div>
   );
 };

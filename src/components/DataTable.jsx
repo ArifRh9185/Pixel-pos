@@ -32,7 +32,6 @@ import {
 import { Input } from "@/components/ui/input"
 import ReceiptDetailModal from "./ReceiptDetailModal"
 
-
 const columns = [
   {
     accessorKey: "id",
@@ -65,37 +64,44 @@ const columns = [
     header: "Total Items",
     cell: ({ row }) => row.getValue("items")?.length || 0,
   },
-{
-  id: "actions",
-  enableHiding: false,
-  cell: ({ row }) => {
-    const receipt = row.original
+  {
+    accessorKey: "paymentMethod",
+    header: "Payment",
+    cell: ({ row }) => {
+      const method = row.getValue("paymentMethod")
+      return method === "QRIS" ? "QRIS" : "Cash"
+    },
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const receipt = row.original
 
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(receipt.id)}
-          >
-            Copy Receipt ID
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <ReceiptDetailModal receipt={receipt} />
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    )
-  }
-}
-
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(receipt.id)}
+            >
+              Copy Receipt ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <ReceiptDetailModal receipt={receipt} />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
+  },
 ]
 
 export function DataTable({ data = [] }) {
@@ -105,37 +111,36 @@ export function DataTable({ data = [] }) {
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState("")
 
-const table = useReactTable({
-    
-  data,
-  columns,
-  state: {
-    sorting,
-    columnFilters,
-    columnVisibility,
-    rowSelection,
-    globalFilter, // tambahkan ini
-  },
-  onSortingChange: setSorting,
-  onColumnFiltersChange: setColumnFilters,
-  onColumnVisibilityChange: setColumnVisibility,
-  onRowSelectionChange: setRowSelection,
-  onGlobalFilterChange: setGlobalFilter, // ini juga
-  getCoreRowModel: getCoreRowModel(),
-  getPaginationRowModel: getPaginationRowModel(),
-  getSortedRowModel: getSortedRowModel(),
-  getFilteredRowModel: getFilteredRowModel(),
-  getGlobalFilteredRowModel: getFilteredRowModel(), // ini penting
-})
+  const table = useReactTable({
+    data,
+    columns,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      globalFilter,
+    },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getGlobalFilteredRowModel: getFilteredRowModel(),
+  })
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-        placeholder="Search by name or receipt ID..."
-        value={globalFilter}
-        onChange={(e) => setGlobalFilter(e.target.value)}
-        className="max-w-sm"
+          placeholder="Search by name or receipt ID..."
+          value={globalFilter}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+          className="max-w-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -164,7 +169,7 @@ const table = useReactTable({
       </div>
       <div className="rounded-3xl border bg-neutral-100/50 border-gray-200 p-2">
         <h1 className="font-semibold text-neutral-800 p-2 text-xl">Invoices</h1>
-        <Table >
+        <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -200,10 +205,7 @@ const table = useReactTable({
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>

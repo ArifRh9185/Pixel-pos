@@ -13,6 +13,7 @@ import { useEffect } from 'react'
 import { collection, addDoc, query, where, getDocs, Timestamp } from 'firebase/firestore'
 import Swal from 'sweetalert2'
 import { ClipLoader } from 'react-spinners'
+import PaymentGate from '../components/PaymentGateway'
 
 
 
@@ -38,7 +39,7 @@ const MainApp = () => {
     fetchReceipts()
   }, [user, loading])
 
-  const handleSendToReceipt = async (customerName = 'Unknown Customer') => {
+  const handleSendToReceipt = async (customerName = 'Unknown Customer', paymentMethod = 'Cash') => {
     if (cart.length === 0 || !user) return
 
     const newReceipt = {
@@ -46,6 +47,7 @@ const MainApp = () => {
       uid: user.uid,
       customer: customerName,
       items: cart,
+      paymentMethod,
       timestamp: Timestamp.now()
     }
     if (newReceipt.customer === '') {
@@ -87,12 +89,13 @@ const MainApp = () => {
     <div className="flex xl:container mx-auto">
       <NavbarNav setPage={setPage} currentPage={page} receiptData={receiptData} />
       <main className="flex-1">
-        {page === 'products' && <ProductList cart={cart} setCart={setCart} onProcess={(name) => handleSendToReceipt(name)}/>}
+        {page === 'products' && <ProductList cart={cart} setCart={setCart} onProcess={(name) => handleSendToReceipt(name)} setPage={setPage}/>}
         {page === 'OrderList' && <OrderList data={receiptData}/>}
         {page === 'history' && <History data={receiptData}/>}
         {page === 'bills' && <Bills />}
         {page === 'settings' && <Settings />}
         {page === 'help' && <Help />}
+        {page === 'payment' && <PaymentGate cart={cart} setPage={setPage} onProcess={(name, method) => handleSendToReceipt(name, method)}/>}
       </main>
     </div>
   )

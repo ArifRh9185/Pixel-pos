@@ -7,7 +7,7 @@ import { auth } from '../firebase';
 import bgProduct from '../assets/bg-product.jpeg';
 import Swal from 'sweetalert2';
 
-const ProductList = ({cart,setCart, onProcess}) => {
+const ProductList = ({cart,setCart, onProcess, setPage}) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
@@ -179,7 +179,7 @@ const ProductList = ({cart,setCart, onProcess}) => {
           })}
         </div>
       </div>
-      <BillDetails cart={cart} setCart={setCart} onProcess={onProcess}/>
+      <BillDetails cart={cart} setCart={setCart} onProcess={onProcess} setPage={setPage}/>
     </div>
   );
 };
