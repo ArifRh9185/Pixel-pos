@@ -19,10 +19,18 @@ import PaymentGate from '../components/PaymentGateway'
 
 const MainApp = () => {
   const [page, setPage] = useState('products')
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useState(() => {
+  const storedCart = localStorage.getItem('cart');
+  return storedCart ? JSON.parse(storedCart) : [];
+  });
   const [receiptData, setReceiptData] = useState([])
 
   const { user, loading } = useAuth()
+
+  // simpan cart ke localStorage setiap kali berubah
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   // Fetch receipts from Firestore on login
   useEffect(() => {
@@ -67,11 +75,14 @@ const MainApp = () => {
             text: 'Receipt has been saved successfully.',
             icon: 'success',
             confirmButtonText: 'OK'
-        })
+        }).then(() => {
+            setPage('products')
+         }) 
       
     } catch (error) {
       console.error('Error saving receipt:', error)
     }
+
   }
 
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-100">

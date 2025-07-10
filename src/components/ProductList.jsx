@@ -96,7 +96,7 @@ const ProductList = ({cart,setCart, onProcess, setPage}) => {
           </div>
           {user && (
             <div className="flex items-center gap-4">
-              <div className="text-sm text-gray-600 text-right">
+              <div className="text-sm text-gray-600 text-right space-y-1">
                 <p className="font-semibold hidden md:block">Yth. {user.displayName || 'Guest'}</p>
                 <p className="text-xs">{new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
               </div>
@@ -135,7 +135,7 @@ const ProductList = ({cart,setCart, onProcess, setPage}) => {
                   <div className='flex flex-col justify-between'>
                     <h3 className="font-bold text-neutral-700 text-sm">{product.name}</h3>
                     <p className="text-xs text-gray-500">{product.available} Available • {product.sold} Sold</p>
-                    <p className="text-md font-semibold text-neutral-800"><span className='text-green-600 font-bold'>Rp.</span>{currentPrice.toLocaleString('id-ID')}k</p>
+                    <p className="text-md font-semibold text-neutral-800"><span className='text-green-600 font-bold'>Rp.</span>{currentPrice.toLocaleString('id-ID')}</p>
                   </div>
                 </div>
 

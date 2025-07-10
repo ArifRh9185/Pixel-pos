@@ -11,15 +11,6 @@ const BillDetails = ({ cart, setCart, setPage}) => {
     localStorage.setItem('customerName', customerName);
   }, [customerName]);
 
-  // const handlePrint = () => {
-  //   const printContent = printRef.current.innerHTML;
-  //   const originalContent = document.body.innerHTML;
-
-  //   document.body.innerHTML = printContent;
-  //   window.print();
-  //   document.body.innerHTML = originalContent;
-  //   window.location.reload(); // agar tampilan kembali normal
-  // };
 
   const handleQtyChange = (index, delta) => {
     const updatedCart = [...cart];
